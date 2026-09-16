@@ -4,6 +4,7 @@ package api_teste.ds.services;
 
 //importa Optional, usada para tratar valores que podem nao estar presentes (evitar NullExceptPointer)
 import java.util.Optional;
+import java.util.concurrent.atomic.LongAccumulator;
 
 //importa a anotaçao de Spring para a injeçao automatica de dependencias
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +63,23 @@ public class UserService {
     public User update(User obj){
 
         User newObj = findById(obj.getId())
+
+        newObj.setPassword(obj.getPassword());
+
+        return this.userRepository.save(newObj);
+
+    }
+
+    public void delete(Long Id){
+
+        findById(Id);
+
+        try{
+
+            this.userRepository.deleteById(Id);
+        } catch (Exception e){
+            throw new RuntimeException("nao e possivel pois ha entidades relacionadas");
+        }
     }
     
 }
